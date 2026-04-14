@@ -1,0 +1,11 @@
+# Security
+.env
+.streamlit/secrets.toml
+
+# Python
+venv/
+__pycache__/
+*.py[cod]
+
+# System files
+.DS_Store
