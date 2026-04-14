@@ -26,7 +26,7 @@ st.markdown("""
 st.title("🤖 Memory Shortage Q&A System")
 
 # It's safer to use st.secrets or environment variables for this!
-os.environ["OPENAI_API_KEY"] = os.environ.get("OPENAI_KEY")
+os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_KEY"]
 # 2. Initialize Vector Store
 @st.cache_resource
 def load_vectorstore():
