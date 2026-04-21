@@ -10,10 +10,9 @@ from langchain_core.runnables import RunnablePassthrough, RunnableLambda
 from langchain_core.output_parsers import StrOutputParser
 from langchain_community.chat_message_histories import StreamlitChatMessageHistory
 
-# 1. Setup Page Config
+# Setup Page Config
 st.set_page_config(page_title="Memory Shortage AI Assistant", layout="wide")
 
-# --- CSS to fix horizontal overflow ---
 st.markdown("""
     <style>
     .stChatMessage {
@@ -25,9 +24,9 @@ st.markdown("""
 
 st.title("🤖 Memory Shortage Q&A System")
 
-# It's safer to use st.secrets or environment variables for this!
+#load api key
 os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_KEY"]
-# 2. Initialize Vector Store
+# Initialize Vector Store
 @st.cache_resource
 def load_vectorstore():
     embeddings = OpenAIEmbeddings()
@@ -36,10 +35,10 @@ def load_vectorstore():
 vectorstore = load_vectorstore()
 retriever = vectorstore.as_retriever()
 
-# 3. Setup History
+# Setup History
 msgs = StreamlitChatMessageHistory(key="chat_messages")
 
-# Add a "Clear Chat" button to the sidebar (Production Feature)
+# "Clear Chat" button
 if st.sidebar.button("Clear Chat History"):
     msgs.clear()
 
@@ -75,7 +74,7 @@ rag_chain = (
     | StrOutputParser()
 )
 
-# 4. Chat UI Logic
+# Chat UI Logic
 for msg in msgs.messages:
     st.chat_message(msg.type).write(msg.content)
 
@@ -88,8 +87,6 @@ if query := st.chat_input("What would you like to know?"):
             docs = retriever.invoke(query)
             response = rag_chain.invoke({"question": query})
             
-            # --- IMPROVED SOURCE FORMATTING ---
-            # We create clickable links instead of raw URLs
             source_links = []
             for doc in docs:
                 source_name = doc.metadata.get('source', 'Source')

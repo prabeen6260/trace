@@ -7,13 +7,13 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_core.documents import Document
 import os
 
-# Set your API Key
+# load API Key
 os.environ["OPENAI_API_KEY"] = os.environ.get("OPENAI_KEY")
-# 1. Load the dataset
+# Load the dataset
 df = pd.read_csv('main_memory_shortage_dataset.csv')
 
-# 2. Convert DataFrame rows into LangChain Document objects
-# We combine Title and Text for better context, and put URL/Source in metadata
+# Convert DataFrame rows into LangChain Document objects
+# combine Title and Text for better context, and put URL/Source in metadata
 documents = []
 for index, row in df.iterrows():
     content = f"Title: {row['title']}\n\nContent: {row['text']}"
@@ -25,7 +25,7 @@ for index, row in df.iterrows():
     doc = Document(page_content=content, metadata=metadata)
     documents.append(doc)
 
-# 3. Split the documents into chunks
+# Split the documents into chunks
 # This prevents hitting token limits and helps find more specific answers
 text_splitter = RecursiveCharacterTextSplitter(
     chunk_size=1000, 
@@ -33,7 +33,7 @@ text_splitter = RecursiveCharacterTextSplitter(
 )
 docs = text_splitter.split_documents(documents)
 
-# 4. Create Embeddings and Save to ChromaDB
+# Create Embeddings and Save to ChromaDB
 # This will create a local folder named 'memory_db' to store your data
 vectorstore = Chroma.from_documents(
     documents=docs, 
