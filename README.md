@@ -1,12 +1,28 @@
-Trace:
-This is a simple Q&A tool built to track what’s happening with the 2026 memory chip shortage.
+# Trace:
+This is a simple Q&A tool built to track what’s happening with the 2026 memory chip and storage shortage.
 
 Instead of relying on an LLM’s general knowledge (which usually hallucinates specific dates or prices), this app uses RAG (Retrieval-Augmented Generation). It searches through a local dataset of scraped news articles to find actual facts before generating an answer.
 
-Why this exists:
+## Why this exists:
 
 The "RAMageddon" of 2026 has been a mess of price hikes and supply chain shifts. I built this to quickly verify who is raising prices, which factories are being built, and what the current lead times look like without digging through dozens of CSV rows manually.
 How it works
+
+## Tech Stack
+
+    Python: The core language.
+
+    Streamlit: Used for the web UI and managing the chat session state.
+
+    LangChain: Handles the RAG "plumbing",splitting the text, connecting to the vector store, and passing the context to the LLM.
+
+    OpenAI (GPT-4o-mini): The brain that summarizes the articles and answers the questions.
+
+    ChromaDB: Our vector database. It lives locally as a folder (memory_db/) so we don't have to pay for a cloud database during development.
+
+    Pandas: Just used once at the start to parse the raw CSV data.
+
+## Working:
 
     Data: It reads from main_memory_shortage_dataset.csv.
 
@@ -16,7 +32,7 @@ How it works
 
     Interface: A simple Streamlit chat UI with "memory" so you can ask follow-up questions.
 
-File Structure
+## File Structure
 
     app.py: The main Streamlit interface and chat logic.
 
